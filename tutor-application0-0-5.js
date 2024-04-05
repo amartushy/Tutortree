@@ -147,12 +147,20 @@ document.addEventListener("DOMContentLoaded", function() {
                             });
                         }
 
+                        if (userData.transcriptURL) {
+                            // User already has a transcript uploaded
+                            const transcriptFileName = userData.transcriptURL.split('/').pop(); // Assuming the URL structure allows this
+                            const transcriptTextElement = document.getElementById('transcript-file-text');
+                            transcriptTextElement.textContent = ` ${decodeURIComponent(transcriptFileName)}`;
+                            transcriptTextElement.style.display = 'block';
+                        }
+
                         //School Selection Update
                         selectedSchoolID = userData.school;
-			if ( selectedSchoolID != "" ) {
+                        fetchAndDisplaySchools();
+                        if ( selectedSchoolID != "" ) {
                             fetchSubjectsAndCourses(selectedSchoolID)
                         }
-                        fetchAndDisplaySchools();
 
                     } else {
                         console.log("No user data found!");
