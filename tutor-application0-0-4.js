@@ -149,6 +149,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
                         //School Selection Update
                         selectedSchoolID = userData.school;
+			if ( selectedSchoolID != "" ) {
+                            fetchSubjectsAndCourses(selectedSchoolID)
+                        }
                         fetchAndDisplaySchools();
 
                     } else {
