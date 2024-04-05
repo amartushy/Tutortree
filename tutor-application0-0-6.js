@@ -104,6 +104,13 @@ function createDOMElement(type, className, value, parent) {
     return DOMElement
 }
 
+
+
+const transcriptFileContainer = document.getElementById('transcript-file-container')
+const transcriptTextElement = document.getElementById('transcript-file-text');
+transcriptFileContainer.style.display = 'none'
+const transcriptFileText = ""
+
 let currentUserID = ""
 let selectedSchoolID = ""
 
@@ -152,7 +159,9 @@ document.addEventListener("DOMContentLoaded", function() {
                             const transcriptFileName = userData.transcriptURL.split('/').pop(); // Assuming the URL structure allows this
                             const transcriptTextElement = document.getElementById('transcript-file-text');
                             transcriptTextElement.textContent = ` ${decodeURIComponent(transcriptFileName)}`;
-                            transcriptTextElement.style.display = 'block';
+
+                            transcriptFileContainer.style.display = 'flex'
+
                         }
 
                         //School Selection Update
