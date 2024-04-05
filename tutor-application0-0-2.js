@@ -105,7 +105,7 @@ function createDOMElement(type, className, value, parent) {
 }
 
 let currentUserID = ""
-
+let selectedSchoolID = ""
 
 //Profile Section____________________________________________________________________________________________________________________________________________
 document.getElementById("default-profile-photo").addEventListener('click', function() {
@@ -148,8 +148,8 @@ document.addEventListener("DOMContentLoaded", function() {
                         }
 
                         //School Selection Update
-                        const selectedSchool = userData.school; // Assuming 'school' field holds the selected school's ID
-                        fetchAndDisplaySchools(selectedSchool);
+                        selectedSchoolID = userData.school;
+                        fetchAndDisplaySchools();
 
                     } else {
                         console.log("No user data found!");
