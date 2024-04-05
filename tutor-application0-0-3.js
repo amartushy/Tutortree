@@ -240,3 +240,113 @@ function uploadImage(file) {
             });
         });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const schoolSearchResults = document.getElementById('school-search-results')
+let allSchools = [];
+
+
+function fetchAndDisplaySchools() {
+
+    schoolSearchResults.innerHTML = '';
+
+    const schoolsRef = database.collection('schools'); 
+    schoolsRef.get().then((querySnapshot) => {
+        allSchools = []; 
+        querySnapshot.forEach((doc) => {
+            const schoolData = { id: doc.id, ...doc.data() }; // Include the document ID in the schoolData object
+            allSchools.push(schoolData);
+        });
+        displaySchools(allSchools);
+    }).catch((error) => {
+        console.log("Error getting documents: ", error);
+    });
+}
+
+
+// Function to display schools given an array of school data
+function displaySchools(schoolsArray) {
+    schoolSearchResults.innerHTML = '';
+
+    schoolsArray.sort((a, b) => a.title.localeCompare(b.title));
+
+    schoolsArray.forEach(schoolData => {
+        createSchoolItem(schoolData, schoolSearchResults);
+    });
+
+    // Scroll to the selected school, if any
+    if (selectedSchoolID) {
+        const selectedSchoolDiv = document.getElementById(selectedSchoolID);
+        if (selectedSchoolDiv) {
+            selectedSchoolDiv.scrollIntoView();
+        }
+    }
+}
+
+// Search field functionality
+document.getElementById('school-search-field').addEventListener('input', function(e) {
+    const searchQuery = e.target.value.toLowerCase();
+    const filteredSchools = allSchools.filter(school => school.title.toLowerCase().includes(searchQuery));
+    displaySchools(filteredSchools);
+});
+
+
+function createSchoolItem(schoolData, schoolSearchResults) {
+    let schoolResultDiv = createDOMElement('div', 'school-result-div', '', schoolSearchResults);
+    schoolResultDiv.id = schoolData.id; 
+    if (schoolData.id === selectedSchoolID) {
+        schoolResultDiv.classList.add('school-result-div-selected');
+    }
+
+    let schoolTitleContainer = createDOMElement('div', 'school-title-container', '', schoolResultDiv);
+    createDOMElement('img', 'school-logo', schoolData.icon, schoolTitleContainer);
+    createDOMElement('div', 'school-title', schoolData.title, schoolTitleContainer);
+
+    let iconContent = schoolData.id === selectedSchoolID ? '' : ''; // Assuming '' is a checkmark, '' is a chevron
+    let iconElement = createDOMElement('div', "chevron", iconContent, schoolResultDiv);
+
+    // Event listener for each school result div
+    schoolResultDiv.addEventListener('click', function() {
+        // Revert the previously selected icon back to a chevron
+
+        document.querySelectorAll('.chevron').forEach(item => {
+            item.innerHTML = ''; //Reset to chevrons
+        });
+
+        // Update the current icon to a checkmark
+        iconElement.innerHTML = '';
+
+        // Add 'school-result-div-selected' class to the clicked div
+        document.querySelectorAll('.school-result-div-selected').forEach(item => {
+            item.classList.remove('school-result-div-selected');
+        });
+        schoolResultDiv.classList.add('school-result-div-selected');
+
+        // Update the user's school in Firestore
+        var userRef = database.collection('users').doc(currentUserID);
+        userRef.update({
+            school: schoolData.id 
+        }).then(function() {
+            console.log("School updated successfully!");
+            fetchSubjectsAndCourses(schoolData.id)
+        }).catch(function(error) {
+            console.error("Error updating school: ", error);
+        });
+    });
+}
