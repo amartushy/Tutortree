@@ -69,7 +69,7 @@ $(document).ready(function() {
             currentSectionIndex = nextIndex;
             updateProgressBar(currentSectionIndex);
             updateButtonVisibility(currentSectionIndex);
-
+            checkNextButtonConditions(currentSectionIndex);
         });
     }
 
@@ -113,6 +113,7 @@ const transcriptFileText = ""
 
 let currentUserID = ""
 let selectedSchoolID = ""
+let selectedCourses = {};
 let globalAvailabilityData = {
     Monday: 0,
     Tuesday: 0,
@@ -389,6 +390,125 @@ function createSchoolItem(schoolData, schoolSearchResults) {
             fetchSubjectsAndCourses(schoolData.id)
         }).catch(function(error) {
             console.error("Error updating school: ", error);
+        });
+    });
+}
+
+
+
+
+
+
+
+
+document.getElementById('transcript-upload-button').addEventListener('click', function() {
+    document.getElementById('transcript-file-input').click(); // Trigger file selection
+});
+
+document.getElementById('transcript-file-input').addEventListener('change', function(e) {
+    if (e.target.files.length > 0) {
+        const file = e.target.files[0];
+        uploadTranscript(file);
+    }
+});
+
+
+
+
+function uploadTranscript(file) {
+    const userId = firebase.auth().currentUser.uid; // Ensure the user is authenticated
+    const transcriptRef = storage.ref(`transcripts/${userId}/${file.name}`);
+    
+    transcriptRef.put(file).then((snapshot) => {
+        console.log('Uploaded a blob or file!');
+        
+        // Get the URL of the uploaded file
+        snapshot.ref.getDownloadURL().then((downloadURL) => {
+            console.log('File available at', downloadURL);
+
+            // Update the user's document with the new transcript URL
+            database.collection('users').doc(userId).update({
+                transcriptURL: downloadURL
+            }).then(() => {
+                console.log('User document updated with transcript URL.');
+
+                // Display the file name and make the text element visible
+
+                const transcriptTextElement = document.getElementById('transcript-file-text');
+                transcriptTextElement.textContent = `${file.name}`;
+                
+                transcriptFileContainer.style.display = 'flex'
+            }).catch((error) => {
+                console.error('Error updating user document:', error);
+            });
+        });
+    }).catch((error) => {
+        console.error('Error uploading file:', error);
+    });
+}
+
+
+
+
+
+function convertToBinaryArray(num) {
+    if (num === undefined || num === null) {
+        console.warn('convertToBinaryArray received undefined or null, treating as 0');
+        num = 0;
+    }
+    let binaryString = num.toString(2);
+    let paddedString = binaryString.padStart(48, '0');
+    return [...paddedString]; // Spread operator to convert string to array
+}
+
+// Converts a binary array back to an integer
+function convertToInt(binaryArray) {
+    let binaryString = binaryArray.join('');
+    return parseInt(binaryString, 2);
+}
+
+
+
+function initAvailabilityUI() {
+    // Define an array of days to iterate through
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+    days.forEach(day => {
+        // Fetch the column by ID
+        const columnId = day.toLowerCase() + '-column'; // Construct the ID string
+        const column = document.getElementById(columnId);
+
+        if (!column) {
+            console.error(`Column for ${day} not found`);
+            return;
+        }
+
+        // Convert the availability data for the day to a binary array
+        const binaryArray = convertToBinaryArray(globalAvailabilityData[day]);
+
+        // Iterate through each slot in the column
+        Array.from(column.children).forEach((slot, index) => {
+            // Initially set all slots to empty-day-slot and clear any existing text
+            slot.className = 'empty-day-slot';
+            slot.textContent = "";
+
+            // Check if the slot should be marked as available
+            if (binaryArray[index] === '1') {
+                slot.className = 'available-day-slot';
+                slot.textContent = "AVAILABLE";
+            }
+
+            // Attach click event listener to toggle availability
+            slot.addEventListener('click', function() {
+                this.classList.toggle('available-day-slot');
+                this.classList.toggle('empty-day-slot');
+                this.textContent = this.classList.contains('available-day-slot') ? "AVAILABLE" : ""
+                binaryArray[index] = this.classList.contains('available-day-slot') ? '1' : '0';
+
+                // Update the global availability data for the day
+                globalAvailabilityData[day] = convertToInt(binaryArray);
+                console.log(`New availability for ${day}:`, globalAvailabilityData[day]);
+            });
         });
     });
 }
