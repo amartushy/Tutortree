@@ -81,7 +81,8 @@ $(document).ready(function() {
     updateButtonVisibility(currentSectionIndex);
 
     $("#next-button").click(function() {
-        if (currentSectionIndex < sections.length - 1) {
+        // Check if the Next button is currently set as invalid before proceeding
+        if (!$(this).hasClass('application-next-invalid') && currentSectionIndex < sections.length - 1) {
             switchSection(currentSectionIndex + 1);
         }
     });
