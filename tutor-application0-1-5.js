@@ -113,7 +113,7 @@ function createDOMElement(type, className, value, parent) {
 const transcriptFileContainer = document.getElementById('transcript-file-container')
 const transcriptTextElement = document.getElementById('transcript-file-text');
 transcriptFileContainer.style.display = 'none'
-const transcriptFileText = ""
+let transcriptFileText = ""
 
 let currentUserID = ""
 let selectedSchoolID = ""
@@ -170,13 +170,15 @@ document.addEventListener("DOMContentLoaded", function() {
                         }
 
                         if (userData.transcriptURL) {
-                            // User already has a transcript uploaded
-                            const transcriptFileName = userData.transcriptURL.split('/').pop(); // Assuming the URL structure allows this
+                            let transcriptFileName = userData.transcriptURL.split('/').pop();
+                            transcriptFileName = transcriptFileName.split('?')[0];
+                            transcriptFileName = decodeURIComponent(transcriptFileName);
+                            
+                            // Set the text content with the clean file name
                             const transcriptTextElement = document.getElementById('transcript-file-text');
-                            transcriptTextElement.textContent = ` ${decodeURIComponent(transcriptFileName)}`;
-
-                            transcriptFileContainer.style.display = 'flex'
-
+                            transcriptTextElement.textContent = ` ${transcriptFileName}`;
+                            
+                            transcriptFileContainer.style.display = 'flex';
                         }
 
                         if (userData && userData.availability) {
@@ -294,236 +296,4 @@ function uploadImage(file) {
                 });
             });
         });
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const schoolSearchResults = document.getElementById('school-search-results')
-let allSchools = [];
-
-
-function fetchAndDisplaySchools() {
-
-    schoolSearchResults.innerHTML = '';
-
-    const schoolsRef = database.collection('schools'); 
-    schoolsRef.get().then((querySnapshot) => {
-        allSchools = []; 
-        querySnapshot.forEach((doc) => {
-            const schoolData = { id: doc.id, ...doc.data() }; // Include the document ID in the schoolData object
-            allSchools.push(schoolData);
-        });
-        displaySchools(allSchools);
-    }).catch((error) => {
-        console.log("Error getting documents: ", error);
-    });
-}
-
-
-// Function to display schools given an array of school data
-function displaySchools(schoolsArray) {
-    schoolSearchResults.innerHTML = '';
-
-    schoolsArray.sort((a, b) => a.title.localeCompare(b.title));
-
-    schoolsArray.forEach(schoolData => {
-        createSchoolItem(schoolData, schoolSearchResults);
-    });
-
-    // Scroll to the selected school, if any
-    if (selectedSchoolID) {
-        const selectedSchoolDiv = document.getElementById(selectedSchoolID);
-        if (selectedSchoolDiv) {
-            selectedSchoolDiv.scrollIntoView();
-        }
-    }
-}
-
-// Search field functionality
-document.getElementById('school-search-field').addEventListener('input', function(e) {
-    const searchQuery = e.target.value.toLowerCase();
-    const filteredSchools = allSchools.filter(school => school.title.toLowerCase().includes(searchQuery));
-    displaySchools(filteredSchools);
-});
-
-
-function createSchoolItem(schoolData, schoolSearchResults) {
-    let schoolResultDiv = createDOMElement('div', 'school-result-div', '', schoolSearchResults);
-    schoolResultDiv.id = schoolData.id; 
-    if (schoolData.id === selectedSchoolID) {
-        schoolResultDiv.classList.add('school-result-div-selected');
-    }
-
-    let schoolTitleContainer = createDOMElement('div', 'school-title-container', '', schoolResultDiv);
-    createDOMElement('img', 'school-logo', schoolData.icon, schoolTitleContainer);
-    createDOMElement('div', 'school-title', schoolData.title, schoolTitleContainer);
-
-    let iconContent = schoolData.id === selectedSchoolID ? '' : ''; // Assuming '' is a checkmark, '' is a chevron
-    let iconElement = createDOMElement('div', "chevron", iconContent, schoolResultDiv);
-
-    // Event listener for each school result div
-    schoolResultDiv.addEventListener('click', function() {
-        // Revert the previously selected icon back to a chevron
-
-        document.querySelectorAll('.chevron').forEach(item => {
-            item.innerHTML = ''; //Reset to chevrons
-        });
-
-        // Update the current icon to a checkmark
-        iconElement.innerHTML = '';
-
-        // Add 'school-result-div-selected' class to the clicked div
-        document.querySelectorAll('.school-result-div-selected').forEach(item => {
-            item.classList.remove('school-result-div-selected');
-        });
-        schoolResultDiv.classList.add('school-result-div-selected');
-
-        // Update the user's school in Firestore
-        var userRef = database.collection('users').doc(currentUserID);
-        userRef.update({
-            school: schoolData.id 
-        }).then(function() {
-            console.log("School updated successfully!");
-            fetchSubjectsAndCourses(schoolData.id)
-            checkNextButtonConditions()
-
-        }).catch(function(error) {
-            console.error("Error updating school: ", error);
-        });
-    });
-}
-
-
-
-
-
-
-
-
-document.getElementById('transcript-upload-button').addEventListener('click', function() {
-    document.getElementById('transcript-file-input').click(); // Trigger file selection
-});
-
-document.getElementById('transcript-file-input').addEventListener('change', function(e) {
-    if (e.target.files.length > 0) {
-        const file = e.target.files[0];
-        uploadTranscript(file);
-    }
-});
-
-
-
-
-function uploadTranscript(file) {
-    const userId = firebase.auth().currentUser.uid; // Ensure the user is authenticated
-    const transcriptRef = storage.ref(`transcripts/${userId}/${file.name}`);
-    
-    transcriptRef.put(file).then((snapshot) => {
-        console.log('Uploaded a blob or file!');
-        
-        // Get the URL of the uploaded file
-        snapshot.ref.getDownloadURL().then((downloadURL) => {
-            console.log('File available at', downloadURL);
-
-            // Update the user's document with the new transcript URL
-            database.collection('users').doc(userId).update({
-                transcriptURL: downloadURL
-            }).then(() => {
-                console.log('User document updated with transcript URL.');
-
-                // Display the file name and make the text element visible
-                checkNextButtonConditions()
-                const transcriptTextElement = document.getElementById('transcript-file-text');
-                transcriptTextElement.textContent = `${file.name}`;
-                
-                transcriptFileContainer.style.display = 'flex'
-            }).catch((error) => {
-                console.error('Error updating user document:', error);
-            });
-        });
-    }).catch((error) => {
-        console.error('Error uploading file:', error);
-    });
-}
-
-
-
-
-
-function convertToBinaryArray(num) {
-    if (num === undefined || num === null) {
-        console.warn('convertToBinaryArray received undefined or null, treating as 0');
-        num = 0;
-    }
-    let binaryString = num.toString(2);
-    let paddedString = binaryString.padStart(48, '0');
-    return [...paddedString]; // Spread operator to convert string to array
-}
-
-// Converts a binary array back to an integer
-function convertToInt(binaryArray) {
-    let binaryString = binaryArray.join('');
-    return parseInt(binaryString, 2);
-}
-
-
-
-function initAvailabilityUI() {
-    // Define an array of days to iterate through
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-    days.forEach(day => {
-        // Fetch the column by ID
-        const columnId = day.toLowerCase() + '-column'; // Construct the ID string
-        const column = document.getElementById(columnId);
-
-        if (!column) {
-            console.error(`Column for ${day} not found`);
-            return;
-        }
-
-        // Convert the availability data for the day to a binary array
-        const binaryArray = convertToBinaryArray(globalAvailabilityData[day]);
-
-        // Iterate through each slot in the column
-        Array.from(column.children).forEach((slot, index) => {
-            // Initially set all slots to empty-day-slot and clear any existing text
-            slot.className = 'empty-day-slot';
-            slot.textContent = "";
-
-            // Check if the slot should be marked as available
-            if (binaryArray[index] === '1') {
-                slot.className = 'available-day-slot';
-                slot.textContent = "AVAILABLE";
-            }
-
-            // Attach click event listener to toggle availability
-            slot.addEventListener('click', function() {
-                this.classList.toggle('available-day-slot');
-                this.classList.toggle('empty-day-slot');
-                this.textContent = this.classList.contains('available-day-slot') ? "AVAILABLE" : ""
-                binaryArray[index] = this.classList.contains('available-day-slot') ? '1' : '0';
-
-                // Update the global availability data for the day
-                globalAvailabilityData[day] = convertToInt(binaryArray);
-                console.log(`New availability for ${day}:`, globalAvailabilityData[day]);
-                checkNextButtonConditions()
-            });
-        });
-    });
 }
