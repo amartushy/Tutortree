@@ -108,7 +108,7 @@ function submitApplication() {
     }, {});
 
     // Reference to the user's document in Firestore
-    const userRef = db.collection('users').doc(currentUserID);
+    const userRef = database.collection('users').doc(currentUserID);
 
     // Prepare the update data, including the processed selectedCourses
     const updateData = {
