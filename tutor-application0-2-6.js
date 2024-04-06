@@ -95,6 +95,7 @@ $("#back-button").click(function() {
     }
 });
 
+document.getElementById("loading-screen").style.display = "flex"
 
 
 function checkNextButtonConditions() {
@@ -221,6 +222,9 @@ document.addEventListener("DOMContentLoaded", function() {
             function loadUserData() {
                 userRef.get().then(doc => {
                     if (doc.exists) {
+
+
+
                         const userData = doc.data();
                         document.getElementById('name-field').value = userData.name || '';
                         document.getElementById('major-field').value = userData.major || '';
@@ -283,6 +287,9 @@ document.addEventListener("DOMContentLoaded", function() {
                             fetchSubjectsAndCourses(selectedSchoolID)
                         }
                         checkNextButtonConditions()
+
+                        //Hide loading screen
+                        $("#loading-screen").fadeOut()
 
 
                     } else {
