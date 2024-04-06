@@ -17,12 +17,10 @@ let progressIds = [
 ];
 
 
+let currentSectionIndex = 0;
 
 
 $(document).ready(function() {
-
-
-    let currentSectionIndex = 0;
 
     sections.forEach((sectionId, index) => {
         if (index === 0) {
@@ -74,7 +72,7 @@ $(document).ready(function() {
             currentSectionIndex = nextIndex;
             updateProgressBar(currentSectionIndex);
             updateButtonVisibility(currentSectionIndex);
-            checkNextButtonConditions(currentSectionIndex);
+            checkNextButtonConditions();
         });
     }
 
@@ -146,6 +144,7 @@ document.addEventListener("DOMContentLoaded", function() {
             // User is signed in, now you can get the user ID
             currentUserID = user.uid;
             const userRef = db.collection('users').doc(currentUserID);
+            checkNextButtonConditions()
 
             // Proceed to load and save user data as before
             function loadUserData() {
@@ -225,6 +224,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 }).catch(error => {
                     console.error("Error updating user data: ", error);
                 });
+
+                checkNextButtonConditions()
             }
 
             // Event listeners for inputs to trigger save on change
@@ -393,6 +394,8 @@ function createSchoolItem(schoolData, schoolSearchResults) {
         }).then(function() {
             console.log("School updated successfully!");
             fetchSubjectsAndCourses(schoolData.id)
+            checkNextButtonConditions()
+
         }).catch(function(error) {
             console.error("Error updating school: ", error);
         });
@@ -438,7 +441,7 @@ function uploadTranscript(file) {
                 console.log('User document updated with transcript URL.');
 
                 // Display the file name and make the text element visible
-
+                checkNextButtonConditions()
                 const transcriptTextElement = document.getElementById('transcript-file-text');
                 transcriptTextElement.textContent = `${file.name}`;
                 
@@ -513,6 +516,7 @@ function initAvailabilityUI() {
                 // Update the global availability data for the day
                 globalAvailabilityData[day] = convertToInt(binaryArray);
                 console.log(`New availability for ${day}:`, globalAvailabilityData[day]);
+                checkNextButtonConditions()
             });
         });
     });
