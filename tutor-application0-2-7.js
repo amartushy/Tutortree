@@ -288,8 +288,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         }
                         checkNextButtonConditions()
 
-                        //Hide loading screen
-                        $("#loading-screen").fadeOut()
+                        setTimeout(function() {
+                            $("#loading-screen").fadeOut();
+                        }, 2000); // 2000 milliseconds = 2 seconds
+                        
 
 
                     } else {
@@ -650,4 +652,3 @@ function submitApplication() {
         console.error("Error submitting application:", error);
     });
 }
-
