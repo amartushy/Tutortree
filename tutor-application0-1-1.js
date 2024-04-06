@@ -1,21 +1,26 @@
-$(document).ready(function() {
-    let sections = [
-        "profile-section",
-        "school-section",
-        "courses-section",
-        "upload-section",
-        "availability-section",
-        "submitted-section"
-    ];
+let sections = [
+    "profile-section",
+    "school-section",
+    "courses-section",
+    "upload-section",
+    "availability-section",
+    "submitted-section"
+];
 
-    let progressIds = [
-        "progress-profile",
-        "progress-school",
-        "progress-courses",
-        "progress-transcript",
-        "progress-availability",
-        "progress-complete"
-    ];
+let progressIds = [
+    "progress-profile",
+    "progress-school",
+    "progress-courses",
+    "progress-transcript",
+    "progress-availability",
+    "progress-complete"
+];
+
+
+
+
+$(document).ready(function() {
+
 
     let currentSectionIndex = 0;
 
