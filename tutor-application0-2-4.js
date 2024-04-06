@@ -19,83 +19,80 @@ let progressIds = [
 
 let currentSectionIndex = 0;
 
+function switchSection(nextIndex) {
+    $("#" + sections[currentSectionIndex]).fadeOut(300, function() {
+        $(this).css('display', 'none');
+        $("#" + sections[nextIndex]).css('display', 'flex').hide().fadeIn(300);
+        currentSectionIndex = nextIndex;
+        updateProgressBar(currentSectionIndex);
+        updateButtonVisibility(currentSectionIndex);
+        checkNextButtonConditions();
+    });
+}
 
-$(document).ready(function() {
 
-    sections.forEach((sectionId, index) => {
-        if (index === 0) {
-            $("#" + sectionId).css('display', 'flex');
+sections.forEach((sectionId, index) => {
+    if (index === 0) {
+        $("#" + sectionId).css('display', 'flex');
+    } else {
+        $("#" + sectionId).css('display', 'none');
+    }
+});
+
+function updateProgressBar(currentIndex) {
+    progressIds.forEach((id, index) => {
+        let progressDiv = $("#" + id);
+        if (index <= currentIndex) {
+            progressDiv.removeClass("progress-div-incomplete").addClass("progress-div-complete");
         } else {
-            $("#" + sectionId).css('display', 'none');
+            progressDiv.removeClass("progress-div-complete").addClass("progress-div-incomplete");
         }
     });
+}
 
-    function updateProgressBar(currentIndex) {
-        progressIds.forEach((id, index) => {
-            let progressDiv = $("#" + id);
-            if (index <= currentIndex) {
-                progressDiv.removeClass("progress-div-incomplete").addClass("progress-div-complete");
-            } else {
-                progressDiv.removeClass("progress-div-complete").addClass("progress-div-incomplete");
-            }
-        });
-    }
-    
-    function updateButtonVisibility(currentIndex) {
-        // Hide the back button on the first and the last section
-        if (currentIndex === 0 || currentIndex === sections.length - 1) {
-            $("#back-button").hide();
-        } else {
-            $("#back-button").show();
-        }
-
-        // Change the text of the next button to "Submit Application" on the availability section
-        // Assuming the "availability-section" is second to last
-        if (currentIndex === sections.length - 2) {
-            $("#next-button").text("Submit Application");
-        } else {
-            $("#next-button").text("Next");
-        }
-
-        // Hide the next button on the last section
-        if (currentIndex === sections.length - 1) {
-            $("#next-button").hide();
-        } else {
-            $("#next-button").show();
-        }
+function updateButtonVisibility(currentIndex) {
+    // Hide the back button on the first and the last section
+    if (currentIndex === 0 || currentIndex === sections.length - 1) {
+        $("#back-button").hide();
+    } else {
+        $("#back-button").show();
     }
 
-    function switchSection(nextIndex) {
-        $("#" + sections[currentSectionIndex]).fadeOut(300, function() {
-            $(this).css('display', 'none');
-            $("#" + sections[nextIndex]).css('display', 'flex').hide().fadeIn(300);
-            currentSectionIndex = nextIndex;
-            updateProgressBar(currentSectionIndex);
-            updateButtonVisibility(currentSectionIndex);
-            checkNextButtonConditions();
-        });
+    // Change the text of the next button to "Submit Application" on the availability section
+    // Assuming the "availability-section" is second to last
+    if (currentIndex === sections.length - 2) {
+        $("#next-button").text("Submit Application");
+    } else {
+        $("#next-button").text("Next");
     }
 
-		// Set initial states
-    updateProgressBar(currentSectionIndex); 
-    updateButtonVisibility(currentSectionIndex);
+    // Hide the next button on the last section
+    if (currentIndex === sections.length - 1) {
+        $("#next-button").hide();
+    } else {
+        $("#next-button").show();
+    }
+}
 
-    $("#next-button").click(function() {
-        // Check if the Next button is currently set as invalid before proceeding
-        if (!$(this).hasClass('application-next-invalid') && currentSectionIndex < sections.length - 1) {
-            switchSection(currentSectionIndex + 1);
-        }
+    // Set initial states
+updateProgressBar(currentSectionIndex); 
+updateButtonVisibility(currentSectionIndex);
 
-        if (currentSectionIndex === sections.length - 2) { // Assuming the "availability-section" is second to last
-            submitApplication();
-        }
-    });
+$("#next-button").click(function() {
+    // Check if the Next button is currently set as invalid before proceeding
+    if (!$(this).hasClass('application-next-invalid') && currentSectionIndex < sections.length - 1) {
+        switchSection(currentSectionIndex + 1);
+    }
 
-    $("#back-button").click(function() {
-        if (currentSectionIndex > 0) {
-            switchSection(currentSectionIndex - 1);
-        }
-    });
+    if (currentSectionIndex === sections.length - 2) { // Assuming the "availability-section" is second to last
+        submitApplication();
+    }
+});
+
+$("#back-button").click(function() {
+    if (currentSectionIndex > 0) {
+        switchSection(currentSectionIndex - 1);
+    }
 });
 
 function submitApplication() {
@@ -268,7 +265,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             // Continue with the normal flow for users without one of these statuses
                             // Your existing code for loading user data goes here
                         }
-                        
+
                         if (userData.profileImage != "") {
 
                             const photoContainer = document.getElementById('profile-photo-container')
