@@ -257,9 +257,18 @@ document.addEventListener("DOMContentLoaded", function() {
                         document.getElementById('year-field').value = userData.grade || '';
                         document.getElementById('bio-field').value = userData.bio || '';
 
-                        if (userData.tutorApplicationStatus == "pending" ) {
-                            currentSectionIndex = sections.length - 1
+                        // Check if the user has a tutor application status of pending, rejected, or accepted
+                        if (["pending", "rejected", "accepted"].includes(userData.tutorApplicationStatus)) {
+                            // Navigate directly to the submitted-section
+                            currentSectionIndex = sections.indexOf("submitted-section");
+                            switchSection(currentSectionIndex);
+                            updateProgressBar(currentSectionIndex);
+                            updateButtonVisibility(currentSectionIndex);
+                        } else {
+                            // Continue with the normal flow for users without one of these statuses
+                            // Your existing code for loading user data goes here
                         }
+                        
                         if (userData.profileImage != "") {
 
                             const photoContainer = document.getElementById('profile-photo-container')
