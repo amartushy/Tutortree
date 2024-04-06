@@ -172,11 +172,11 @@ document.addEventListener("DOMContentLoaded", function() {
                         if (userData.transcriptURL) {
                             let transcriptFileName = userData.transcriptURL.split('/').pop();
                             transcriptFileName = transcriptFileName.split('?')[0];
-                            transcriptFileName = decodeURIComponent(transcriptFileName);
+                            transcriptFileText = decodeURIComponent(transcriptFileName);
                             
                             // Set the text content with the clean file name
                             const transcriptTextElement = document.getElementById('transcript-file-text');
-                            transcriptTextElement.textContent = ` ${transcriptFileName}`;
+                            transcriptTextElement.textContent = ` ${transcriptFileText}`;
                             
                             transcriptFileContainer.style.display = 'flex';
                         }
