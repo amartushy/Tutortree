@@ -85,6 +85,10 @@ $(document).ready(function() {
         if (!$(this).hasClass('application-next-invalid') && currentSectionIndex < sections.length - 1) {
             switchSection(currentSectionIndex + 1);
         }
+
+        if (currentSectionIndex === sections.length - 2) { // Assuming the "availability-section" is second to last
+            submitApplication();
+        }
     });
 
     $("#back-button").click(function() {
@@ -93,6 +97,26 @@ $(document).ready(function() {
         }
     });
 });
+
+function submitApplication() {
+    // Reference to the user's document in Firestore
+    const userRef = db.collection('users').doc(currentUserID);
+
+    // Prepare the update data
+    const updateData = {
+        availability: globalAvailabilityData,
+        selectedCourses: selectedCourses,
+        // Include any other fields you want to update here
+    };
+
+    // Perform the update
+    userRef.update(updateData).then(() => {
+        console.log("Application submitted successfully.");
+
+    }).catch(error => {
+        console.error("Error submitting application:", error);
+    });
+}
 
 
 // The createDOMElement function as provided
