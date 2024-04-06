@@ -1,6 +1,3 @@
-let selectedCourses = {};
-
-
 
 
 function fetchSubjectsAndCourses(forSchool) {
