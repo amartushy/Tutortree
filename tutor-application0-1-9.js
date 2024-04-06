@@ -100,7 +100,7 @@ $(document).ready(function() {
 
 function submitApplication() {
     // Reference to the user's document in Firestore
-    const userRef = db.collection('users').doc(currentUserID);
+    const userRef = database.collection('users').doc(currentUserID);
 
     // Prepare the update data
     const updateData = {
@@ -117,6 +117,75 @@ function submitApplication() {
         console.error("Error submitting application:", error);
     });
 }
+
+
+function checkNextButtonConditions() {
+    // Default: enable the Next button and set it as valid
+    let enableNextButton = false;
+    let nextButtonClass = 'application-next-invalid';
+
+    // Based on the current section, check conditions
+    switch (sections[currentSectionIndex]) {
+        case 'profile-section':
+            // Disable if any field is empty
+            const name = $('#name-field').val();
+            const major = $('#major-field').val();
+            const year = $('#year-field').val();
+            const bio = $('#bio-field').val();
+            if (!name || !major || !year || !bio) {
+                enableNextButton = false;
+                nextButtonClass = 'application-next-invalid';
+            } else {
+                enableNextButton = true;
+                nextButtonClass = 'application-next-valid';
+            }
+            break;
+        case 'school-section':
+            // Disable if no school selected
+            if (!selectedSchoolID) {
+                enableNextButton = false;
+                nextButtonClass = 'application-next-invalid';
+            } else {
+                enableNextButton = true;
+                nextButtonClass = 'application-next-valid';
+            }
+            break;
+        case 'courses-section':
+            // Always enabled (Optional section)
+            enableNextButton = true;
+            nextButtonClass = 'application-next-valid';
+            break;
+        case 'upload-section':
+            // Disable if no transcript uploaded
+            if (!transcriptFileText) {
+                enableNextButton = false;
+                nextButtonClass = 'application-next-invalid';
+            } else {
+                enableNextButton = true;
+                nextButtonClass = 'application-next-valid';
+            }
+            break;
+        case 'availability-section':
+            // Disable if no slots available
+            const isAnyDayAvailable = Object.values(globalAvailabilityData).some(dayValue => dayValue !== 0);
+            if (!isAnyDayAvailable) {
+                enableNextButton = false;
+                nextButtonClass = 'application-next-invalid';
+            } else {
+                enableNextButton = true;
+                nextButtonClass = 'application-next-valid';
+            }
+            break;
+    }
+
+    // Update the Next button's class based on the check
+    $('#next-button').removeClass('application-next-valid application-next-invalid')
+                     .addClass(nextButtonClass);
+    
+    // Update the Next button's disabled property
+    $('#next-button').prop('disabled', !enableNextButton);
+}
+
 
 
 // The createDOMElement function as provided
