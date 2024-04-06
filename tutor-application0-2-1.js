@@ -99,20 +99,28 @@ $(document).ready(function() {
 });
 
 function submitApplication() {
-    // Reference to the user's document in Firestore
-    const userRef = database.collection('users').doc(currentUserID);
+    // Process selectedCourses to remove HTML elements and keep only serializable data
+    const processedSelectedCourses = Object.entries(selectedCourses).reduce((acc, [key, course]) => {
+        // Extract only the serializable properties of each course
+        const { subject, courseCode } = course;
+        acc[key] = { subject, courseCode }; // Adjust according to the properties you need
+        return acc;
+    }, {});
 
-    // Prepare the update data
+    // Reference to the user's document in Firestore
+    const userRef = db.collection('users').doc(currentUserID);
+
+    // Prepare the update data, including the processed selectedCourses
     const updateData = {
         availability: globalAvailabilityData,
-        selectedCourses: selectedCourses,
-        tutorApplicationStatus : "pending"
+        selectedCourses: processedSelectedCourses, // Use the processed version
+        tutorApplicationStatus: "pending"
     };
 
     // Perform the update
     userRef.update(updateData).then(() => {
         console.log("Application submitted successfully.");
-
+        // Optionally, redirect the user or show a success message
     }).catch(error => {
         console.error("Error submitting application:", error);
     });
