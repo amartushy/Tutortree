@@ -106,7 +106,7 @@ function submitApplication() {
     const updateData = {
         availability: globalAvailabilityData,
         selectedCourses: selectedCourses,
-        // Include any other fields you want to update here
+        tutorApplicationStatus : "pending"
     };
 
     // Perform the update
@@ -249,6 +249,9 @@ document.addEventListener("DOMContentLoaded", function() {
                         document.getElementById('year-field').value = userData.grade || '';
                         document.getElementById('bio-field').value = userData.bio || '';
 
+                        if (userData.tutorApplicationStatus == "pending" ) {
+                            currentSectionIndex = sections.length - 1
+                        }
                         if (userData.profileImage != "") {
 
                             const photoContainer = document.getElementById('profile-photo-container')
