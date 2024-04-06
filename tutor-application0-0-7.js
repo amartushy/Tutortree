@@ -113,6 +113,16 @@ const transcriptFileText = ""
 
 let currentUserID = ""
 let selectedSchoolID = ""
+let globalAvailabilityData = {
+    Monday: 0,
+    Tuesday: 0,
+    Wednesday: 0,
+    Thursday: 0,
+    Friday: 0,
+    Saturday: 0,
+    Sunday: 0
+};
+
 
 //Profile Section____________________________________________________________________________________________________________________________________________
 document.getElementById("default-profile-photo").addEventListener('click', function() {
@@ -164,6 +174,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
                         }
 
+                        if (userData.availability) {
+                            // Update globalAvailabilityData with fetched data
+                            Object.keys(globalAvailabilityData).forEach(day => {
+                                if (userData.availability[day] !== undefined) {
+                                    globalAvailabilityData[day] = userData.availability[day];
+                                }
+                            });
+                        }
+                        initAvailabilityUI();
+
                         //School Selection Update
                         selectedSchoolID = userData.school;
                         fetchAndDisplaySchools();
@@ -174,10 +194,12 @@ document.addEventListener("DOMContentLoaded", function() {
                     } else {
                         console.log("No user data found!");
                         fetchAndDisplaySchools();
+                        initAvailabilityUI();
                     }
                 }).catch(error => {
                     console.log("Error getting user data:", error);
                     fetchAndDisplaySchools();
+                    initAvailabilityUI();
                 });
             }
 
