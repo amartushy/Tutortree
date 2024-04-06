@@ -95,33 +95,6 @@ $("#back-button").click(function() {
     }
 });
 
-function submitApplication() {
-    // Process selectedCourses to remove HTML elements and keep only serializable data
-    const processedSelectedCourses = Object.entries(selectedCourses).reduce((acc, [key, course]) => {
-        // Extract only the serializable properties of each course
-        const { subject, courseCode } = course;
-        acc[key] = { subject, courseCode }; // Adjust according to the properties you need
-        return acc;
-    }, {});
-
-    // Reference to the user's document in Firestore
-    const userRef = database.collection('users').doc(currentUserID);
-
-    // Prepare the update data, including the processed selectedCourses
-    const updateData = {
-        availability: globalAvailabilityData,
-        selectedCourses: processedSelectedCourses, // Use the processed version
-        tutorApplicationStatus: "pending"
-    };
-
-    // Perform the update
-    userRef.update(updateData).then(() => {
-        console.log("Application submitted successfully.");
-        // Optionally, redirect the user or show a success message
-    }).catch(error => {
-        console.error("Error submitting application:", error);
-    });
-}
 
 
 function checkNextButtonConditions() {
@@ -257,6 +230,8 @@ document.addEventListener("DOMContentLoaded", function() {
                         // Check if the user has a tutor application status of pending, rejected, or accepted
                         if (["pending", "rejected", "accepted"].includes(userData.tutorApplicationStatus)) {
                             // Navigate directly to the submitted-section
+                            $("#profile-section").css('display', 'none');
+
                             currentSectionIndex = sections.indexOf("submitted-section");
                             switchSection(currentSectionIndex);
                             updateProgressBar(currentSectionIndex);
@@ -639,3 +614,33 @@ function initAvailabilityUI() {
         });
     });
 }
+
+
+function submitApplication() {
+    // Process selectedCourses to remove HTML elements and keep only serializable data
+    const processedSelectedCourses = Object.entries(selectedCourses).reduce((acc, [key, course]) => {
+        // Extract only the serializable properties of each course
+        const { subject, courseCode } = course;
+        acc[key] = { subject, courseCode }; // Adjust according to the properties you need
+        return acc;
+    }, {});
+
+    // Reference to the user's document in Firestore
+    const userRef = database.collection('users').doc(currentUserID);
+
+    // Prepare the update data, including the processed selectedCourses
+    const updateData = {
+        availability: globalAvailabilityData,
+        selectedCourses: processedSelectedCourses, // Use the processed version
+        tutorApplicationStatus: "pending"
+    };
+
+    // Perform the update
+    userRef.update(updateData).then(() => {
+        console.log("Application submitted successfully.");
+        // Optionally, redirect the user or show a success message
+    }).catch(error => {
+        console.error("Error submitting application:", error);
+    });
+}
+
