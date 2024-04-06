@@ -144,7 +144,6 @@ document.addEventListener("DOMContentLoaded", function() {
             // User is signed in, now you can get the user ID
             currentUserID = user.uid;
             const userRef = db.collection('users').doc(currentUserID);
-            checkNextButtonConditions()
 
             // Proceed to load and save user data as before
             function loadUserData() {
@@ -195,16 +194,22 @@ document.addEventListener("DOMContentLoaded", function() {
                         if ( selectedSchoolID != "" ) {
                             fetchSubjectsAndCourses(selectedSchoolID)
                         }
+                        checkNextButtonConditions()
+
 
                     } else {
                         console.log("No user data found!");
                         fetchAndDisplaySchools();
                         initAvailabilityUI();
+                        checkNextButtonConditions()
+
                     }
                 }).catch(error => {
                     console.log("Error getting user data:", error);
                     fetchAndDisplaySchools();
                     initAvailabilityUI();
+                    checkNextButtonConditions()
+
                 });
             }
 
