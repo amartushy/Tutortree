@@ -298,14 +298,12 @@ document.addEventListener("DOMContentLoaded", function() {
                     } else {
                         console.log("No user data found!");
                         fetchAndDisplaySchools();
-                        initAvailabilityUI();
                         checkNextButtonConditions()
 
                     }
                 }).catch(error => {
                     console.log("Error getting user data:", error);
                     fetchAndDisplaySchools();
-                    initAvailabilityUI();
                     checkNextButtonConditions()
 
                 });
@@ -341,6 +339,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             // Load user data
             loadUserData();
+            initAvailabilityUI()
         } else {
             // No user is signed in. Handle accordingly, e.g., redirect to login page
             console.log("No user is signed in.");
@@ -651,3 +650,4 @@ function submitApplication() {
         console.error("Error submitting application:", error);
     });
 }
+
