@@ -75,7 +75,7 @@ function updateButtonVisibility(currentIndex) {
 }
 
     // Set initial states
-updateProgressBar(currentSectionIndex); 
+updateProgressBar(currentSectionIndex);
 updateButtonVisibility(currentSectionIndex);
 
 $("#next-button").click(function() {
@@ -99,6 +99,7 @@ document.getElementById("loading-screen").style.display = "flex"
 
 
 function checkNextButtonConditions() {
+    console.log("Checking button conditions for page: ", sections[currentSectionIndex])
     // Default: enable the Next button and set it as valid
     let enableNextButton = false;
     let nextButtonClass = 'application-next-invalid';
@@ -222,8 +223,6 @@ document.addEventListener("DOMContentLoaded", function() {
             function loadUserData() {
                 userRef.get().then(doc => {
                     if (doc.exists) {
-
-
 
                         const userData = doc.data();
                         document.getElementById('name-field').value = userData.name || '';
@@ -417,9 +416,9 @@ function fetchAndDisplaySchools() {
 
     schoolSearchResults.innerHTML = '';
 
-    const schoolsRef = database.collection('schools'); 
+    const schoolsRef = database.collection('schools');
     schoolsRef.get().then((querySnapshot) => {
-        allSchools = []; 
+        allSchools = [];
         querySnapshot.forEach((doc) => {
             const schoolData = { id: doc.id, ...doc.data() }; // Include the document ID in the schoolData object
             allSchools.push(schoolData);
@@ -460,7 +459,7 @@ document.getElementById('school-search-field').addEventListener('input', functio
 
 function createSchoolItem(schoolData, schoolSearchResults) {
     let schoolResultDiv = createDOMElement('div', 'school-result-div', '', schoolSearchResults);
-    schoolResultDiv.id = schoolData.id; 
+    schoolResultDiv.id = schoolData.id;
     if (schoolData.id === selectedSchoolID) {
         schoolResultDiv.classList.add('school-result-div-selected');
     }
@@ -492,7 +491,7 @@ function createSchoolItem(schoolData, schoolSearchResults) {
         // Update the user's school in Firestore
         var userRef = database.collection('users').doc(currentUserID);
         userRef.update({
-            school: schoolData.id 
+            school: schoolData.id
         }).then(function() {
             console.log("School updated successfully!");
             fetchSubjectsAndCourses(schoolData.id)
@@ -652,3 +651,4 @@ function submitApplication() {
         console.error("Error submitting application:", error);
     });
 }
+
