@@ -268,6 +268,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             transcriptTextElement.textContent = ` ${transcriptFileText}`;
                             
                             transcriptFileContainer.style.display = 'flex';
+                            checkNextButtonConditions()
                         }
 
                         if (userData && userData.availability) {
