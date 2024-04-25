@@ -495,6 +495,7 @@ function createSchoolItem(schoolData, schoolSearchResults) {
             school: schoolData.id
         }).then(function() {
             console.log("School updated successfully!");
+            selectedSchoolID = schoolData.id
             fetchSubjectsAndCourses(schoolData.id)
             checkNextButtonConditions()
 
@@ -503,10 +504,6 @@ function createSchoolItem(schoolData, schoolSearchResults) {
         });
     });
 }
-
-
-
-
 
 
 
