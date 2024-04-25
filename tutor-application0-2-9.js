@@ -121,6 +121,7 @@ function checkNextButtonConditions() {
             }
             break;
         case 'school-section':
+            console.log("School ID: ", selectedSchoolID)
             // Disable if no school selected
             if (!selectedSchoolID) {
                 enableNextButton = false;
@@ -651,4 +652,3 @@ function submitApplication() {
         console.error("Error submitting application:", error);
     });
 }
-
