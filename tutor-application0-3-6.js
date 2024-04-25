@@ -593,7 +593,6 @@ function initAvailabilityUI() {
 
         // Convert the availability data for the day to a binary array
         const binaryArray = convertToBinaryArray(globalAvailabilityData[day]);
-        print(binaryArray)
         // Iterate through each slot in the column
         Array.from(column.children).forEach((slot, index) => {
             // Initially set all slots to empty-day-slot and clear any existing text
