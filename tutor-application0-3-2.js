@@ -544,8 +544,9 @@ function uploadTranscript(file) {
                 checkNextButtonConditions()
                 const transcriptTextElement = document.getElementById('transcript-file-text');
                 transcriptTextElement.textContent = `${file.name}`;
-                
                 transcriptFileContainer.style.display = 'flex'
+                transcriptFileText = `${file.name}`;
+                
             }).catch((error) => {
                 console.error('Error updating user document:', error);
             });
