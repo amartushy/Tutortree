@@ -218,9 +218,6 @@ function uploadImage(file) {
 
 
 
-
-
-
 const schoolSearchResults = document.getElementById('school-search-results')
 let allSchools = [];
 
@@ -318,54 +315,54 @@ function createSchoolItem(schoolData, schoolSearchResults) {
 }
 
 
-
-
-document.getElementById('transcript-upload-button').addEventListener('click', function() {
-    document.getElementById('transcript-file-input').click(); // Trigger file selection
-});
-
-document.getElementById('transcript-file-input').addEventListener('change', function(e) {
-    if (e.target.files.length > 0) {
-        const file = e.target.files[0];
-        uploadTranscript(file);
-    }
-});
-
-
-
-
-function uploadTranscript(file) {
-    const userId = firebase.auth().currentUser.uid; // Ensure the user is authenticated
-    const transcriptRef = storage.ref(`transcripts/${userId}/${file.name}`);
-    
-    transcriptRef.put(file).then((snapshot) => {
-        console.log('Uploaded a blob or file!');
-        
-        // Get the URL of the uploaded file
-        snapshot.ref.getDownloadURL().then((downloadURL) => {
-            console.log('File available at', downloadURL);
-
-            // Update the user's document with the new transcript URL
-            database.collection('users').doc(userId).update({
-                transcriptURL: downloadURL
-            }).then(() => {
-                console.log('User document updated with transcript URL.');
-
-                // Display the file name and make the text element visible
-                checkNextButtonConditions()
-                const transcriptTextElement = document.getElementById('transcript-file-text');
-                transcriptTextElement.textContent = `${file.name}`;
-                transcriptFileContainer.style.display = 'flex'
-                transcriptFileText = `${file.name}`;
-                checkNextButtonConditions()
-            }).catch((error) => {
-                console.error('Error updating user document:', error);
-            });
-        });
-    }).catch((error) => {
-        console.error('Error uploading file:', error);
-    });
-}
+//
+//
+//document.getElementById('transcript-upload-button').addEventListener('click', function() {
+//    document.getElementById('transcript-file-input').click(); // Trigger file selection
+//});
+//
+//document.getElementById('transcript-file-input').addEventListener('change', function(e) {
+//    if (e.target.files.length > 0) {
+//        const file = e.target.files[0];
+//        uploadTranscript(file);
+//    }
+//});
+//
+//
+//
+//
+//function uploadTranscript(file) {
+//    const userId = firebase.auth().currentUser.uid; // Ensure the user is authenticated
+//    const transcriptRef = storage.ref(`transcripts/${userId}/${file.name}`);
+//    
+//    transcriptRef.put(file).then((snapshot) => {
+//        console.log('Uploaded a blob or file!');
+//        
+//        // Get the URL of the uploaded file
+//        snapshot.ref.getDownloadURL().then((downloadURL) => {
+//            console.log('File available at', downloadURL);
+//
+//            // Update the user's document with the new transcript URL
+//            database.collection('users').doc(userId).update({
+//                transcriptURL: downloadURL
+//            }).then(() => {
+//                console.log('User document updated with transcript URL.');
+//
+//                // Display the file name and make the text element visible
+//                checkNextButtonConditions()
+//                const transcriptTextElement = document.getElementById('transcript-file-text');
+//                transcriptTextElement.textContent = `${file.name}`;
+//                transcriptFileContainer.style.display = 'flex'
+//                transcriptFileText = `${file.name}`;
+//                checkNextButtonConditions()
+//            }).catch((error) => {
+//                console.error('Error updating user document:', error);
+//            });
+//        });
+//    }).catch((error) => {
+//        console.error('Error uploading file:', error);
+//    });
+//}
 
 
 
