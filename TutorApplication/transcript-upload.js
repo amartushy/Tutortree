@@ -1,50 +1,82 @@
-document.getElementById('transcript-upload-button').addEventListener('click', function() {
+document.getElementById('transcript-upload-area').addEventListener('click', function() {
     document.getElementById('transcript-file-input').click(); // Trigger file selection
 });
 
-document.getElementById('transcript-file-input').addEventListener('change', function(e) {
-    if (e.target.files.length > 0) {
-        const file = e.target.files[0];
-        showLoadingAnimation();
-        uploadTranscript(file);
-    }
+document.getElementById('transcript-file-input').addEventListener('change', function(event) {
+    handleFiles(event.target.files); // Directly handle files from input
 });
 
+function handleFiles(files) {
+    if (files.length > 0) {
+        showLoadingAnimation();
+        uploadTranscript(files[0]);
+    }
+}
+
+const uploadArea = document.getElementById('transcript-upload-area');
+
+// Prevent default drag behaviors
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+  uploadArea.addEventListener(eventName, preventDefaults, false);
+});
+
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+// Highlight drop area when item is dragged over it
+['dragenter', 'dragover'].forEach(eventName => {
+  uploadArea.addEventListener(eventName, highlight, false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+  uploadArea.addEventListener(eventName, unhighlight, false);
+});
+
+function highlight(e) {
+    uploadArea.classList.add('dragover');
+}
+
+function unhighlight(e) {
+    uploadArea.classList.remove('dragover');
+}
+
+// Handle dropped files
+uploadArea.addEventListener('drop', function(event) {
+    handleFiles(event.dataTransfer.files); // Handle files from drop
+});
+
+
+function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+
+    handleFiles({dataTransfer: dt});
+}
+
+//Handle animations
 function showLoadingAnimation() {
     const loadingAnim = document.getElementById('loading-animation');
-    loadingAnim.classList.add('fade-in');
-    loadingAnim.classList.remove('fade-out');
     loadingAnim.style.display = 'block'; // Show the loading animation
-    lottie.loadAnimation({
-        container: loadingAnim,
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        path: 'path/to/loading-animation.json' // Path to your loading animation JSON
-    });
 }
 
 function hideLoadingAnimation() {
     const loadingAnim = document.getElementById('loading-animation');
-    loadingAnim.classList.add('fade-out');
-    loadingAnim.classList.remove('fade-in');
-    setTimeout(() => {
-        loadingAnim.style.display = 'none'; // Hide the loading animation
-    }, 500); // Corresponds to animation duration
+    loadingAnim.style.display = 'none'; // Hide the loading animation
 }
 
 function showDoneAnimation() {
     const doneAnim = document.getElementById('done-loading-animation');
-    doneAnim.classList.add('fade-in');
-    doneAnim.classList.remove('fade-out');
     doneAnim.style.display = 'block'; // Show the done animation
-    lottie.loadAnimation({
-        container: doneAnim,
-        renderer: 'svg',
-        loop: false,
-        autoplay: true,
-        path: 'path/to/done-animation.json' // Path to your done animation JSON
-    });
+    playLottieAnimation('done-loading-animation');
+
+}
+
+function playLottieAnimation(elementId) {
+    const animationElement = document.getElementById(elementId);
+    const lottieInstance = animationElement.lottie;
+    lottieInstance.goToAndPlay(0); // Restart and play the animation from the beginning
 }
 
 function uploadTranscript(file) {
@@ -63,14 +95,6 @@ function uploadTranscript(file) {
                 transcriptTextElement.textContent = file.name;
                 hideLoadingAnimation();
                 showDoneAnimation();
-                setTimeout(() => {
-                    const doneAnim = document.getElementById('done-loading-animation');
-                    doneAnim.classList.add('fade-out');
-                    doneAnim.classList.remove('fade-in');
-                    setTimeout(() => {
-                        doneAnim.style.display = 'none'; // Hide the done animation after it plays
-                    }, 500); // Corresponds to animation duration
-                }, 3000); // Display done animation for 3 seconds before hiding
             }).catch((error) => {
                 console.error('Error updating user document:', error);
                 hideLoadingAnimation();
