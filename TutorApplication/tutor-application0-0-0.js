@@ -315,58 +315,6 @@ function createSchoolItem(schoolData, schoolSearchResults) {
 }
 
 
-//
-//
-//document.getElementById('transcript-upload-button').addEventListener('click', function() {
-//    document.getElementById('transcript-file-input').click(); // Trigger file selection
-//});
-//
-//document.getElementById('transcript-file-input').addEventListener('change', function(e) {
-//    if (e.target.files.length > 0) {
-//        const file = e.target.files[0];
-//        uploadTranscript(file);
-//    }
-//});
-//
-//
-//
-//
-//function uploadTranscript(file) {
-//    const userId = firebase.auth().currentUser.uid; // Ensure the user is authenticated
-//    const transcriptRef = storage.ref(`transcripts/${userId}/${file.name}`);
-//    
-//    transcriptRef.put(file).then((snapshot) => {
-//        console.log('Uploaded a blob or file!');
-//        
-//        // Get the URL of the uploaded file
-//        snapshot.ref.getDownloadURL().then((downloadURL) => {
-//            console.log('File available at', downloadURL);
-//
-//            // Update the user's document with the new transcript URL
-//            database.collection('users').doc(userId).update({
-//                transcriptURL: downloadURL
-//            }).then(() => {
-//                console.log('User document updated with transcript URL.');
-//
-//                // Display the file name and make the text element visible
-//                checkNextButtonConditions()
-//                const transcriptTextElement = document.getElementById('transcript-file-text');
-//                transcriptTextElement.textContent = `${file.name}`;
-//                transcriptFileContainer.style.display = 'flex'
-//                transcriptFileText = `${file.name}`;
-//                checkNextButtonConditions()
-//            }).catch((error) => {
-//                console.error('Error updating user document:', error);
-//            });
-//        });
-//    }).catch((error) => {
-//        console.error('Error uploading file:', error);
-//    });
-//}
-
-
-
-
 
 function convertToBinaryArray(num) {
     if (num === undefined || num === null) {
@@ -453,9 +401,32 @@ function submitApplication() {
     // Perform the update
     userRef.update(updateData).then(() => {
         console.log("Application submitted successfully.");
-        // Optionally, redirect the user or show a success message
+        sendApplicationToServer(currentUserID);
+
     }).catch(error => {
         console.error("Error submitting application:", error);
     });
 }
 
+
+function sendApplicationToServer(userID) {
+    fetch('https://tutortree-1f6f9e7e11c7.herokuapp.com/sendTutorApplicationEmail', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userID: userID })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Server response:", data.status);
+    })
+    .catch(error => {
+        console.error("Error sending data to server:", error);
+    });
+}
