@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         document.getElementById('year-field').value = userData.grade || '';
                         document.getElementById('bio-field').value = userData.bio || '';
 
-                        var currentLength = bioField.value.length;
+                        var currentLength = document.getElementById('bio-field').value.length;
                         document.getElementById('char-counter').textContent = `${currentLength} of ${maxLength}`;
                         
                         // Check if the user has a tutor application status of pending, rejected, or accepted
