@@ -13,6 +13,9 @@ function createDOMElement(type, className, value, parent) {
 }
 
 
+//Globals
+var maxLength = 400;
+
 
 const transcriptFileContainer = document.getElementById('transcript-file-container')
 const transcriptTextElement = document.getElementById('transcript-file-text');
@@ -173,7 +176,6 @@ function initializeProfileFieldListeners() {
 function updateCharCounter() {
     var bioField = document.getElementById('bio-field');
     var charCounter = document.getElementById('char-counter');
-    var maxLength = 400;
     var currentLength = bioField.value.length;
     charCounter.textContent = `${currentLength} of ${maxLength}`;
     // Toggle class based on character count
