@@ -87,6 +87,10 @@ function uploadTranscript(file) {
         console.log('Uploaded a blob or file!');
         snapshot.ref.getDownloadURL().then((downloadURL) => {
             console.log('File available at', downloadURL);
+            let transcriptFileName = userData.transcriptURL.split('/').pop();
+            transcriptFileName = transcriptFileName.split('?')[0];
+            transcriptFileText = decodeURIComponent(transcriptFileName);
+            
             database.collection('users').doc(userId).update({
                 transcriptURL: downloadURL
             }).then(() => {
