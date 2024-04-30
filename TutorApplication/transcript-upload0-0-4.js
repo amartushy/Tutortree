@@ -91,6 +91,8 @@ function uploadTranscript(file) {
             transcriptFileName = transcriptFileName.split('?')[0];
             transcriptFileText = decodeURIComponent(transcriptFileName);
             
+            checkNextButtonConditions()
+
             database.collection('users').doc(userId).update({
                 transcriptURL: downloadURL
             }).then(() => {
@@ -99,7 +101,7 @@ function uploadTranscript(file) {
                 transcriptTextElement.textContent = file.name;
                 hideLoadingAnimation();
                 showDoneAnimation();
-                checkNextButtonConditions()
+                
             }).catch((error) => {
                 console.error('Error updating user document:', error);
                 hideLoadingAnimation();
