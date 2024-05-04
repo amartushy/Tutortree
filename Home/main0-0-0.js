@@ -19,6 +19,9 @@ let schoolLookupTable = {};
 
 
 //References
+const adminSchools = document.getElementById('admin-schools')
+const adminApplicants = document.getElementById('admin-applicants')
+
 const applicantsContainer = document.getElementById('applicants-container')
 const schoolsContainer = document.getElementById('schools-container')
 
@@ -65,8 +68,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function showApplicants() {
     // Display the applicants container and hide the schools container
-    applicantsContainer.style.display = 'block';
-    schoolsContainer.style.display = 'none';
+    adminApplicants.style.display = 'block';
+    adminSchools.style.display = 'none';
 
     // Update tab classes
     applicationsTab.className = 'nav-item-selected';
@@ -75,8 +78,8 @@ function showApplicants() {
 
 function showSchools() {
     // Display the schools container and hide the applicants container
-    schoolsContainer.style.display = 'block';
-    applicantsContainer.style.display = 'none';
+    adminSchools.style.display = 'block';
+    adminApplicants.style.display = 'none';
 
     // Update tab classes
     applicationsTab.className = 'nav-item';
