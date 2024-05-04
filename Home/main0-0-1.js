@@ -20,7 +20,7 @@ let schoolLookupTable = {};
 
 //References
 const adminSchools = document.getElementById('admin-schools')
-const adminApplicants = document.getElementById('admin-applicants')
+const adminApplicants = document.getElementById('admin-applications')
 
 const applicantsContainer = document.getElementById('applicants-container')
 const schoolsContainer = document.getElementById('schools-container')
