@@ -31,12 +31,10 @@ const schoolsTab = document.getElementById('schools-tab')
 
 document.addEventListener("DOMContentLoaded", function() {
     applicantsContainer.innerHTML = ""
-    buildSchoolLookupTable().then(() => {
+    buildSchoolsTable().then(() => {
         fetchTutorApplications();
     });
-    
-    buildSchoolsTable();
-    
+        
     applicantsContainer.style.display = 'block';
     schoolsContainer.style.display = 'none';
     applicationsTab.className = 'nav-item-selected';
