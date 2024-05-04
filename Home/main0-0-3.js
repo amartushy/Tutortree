@@ -31,14 +31,15 @@ const schoolsTab = document.getElementById('schools-tab')
 
 document.addEventListener("DOMContentLoaded", function() {
     applicantsContainer.innerHTML = ""
+    schoolsContainer.innerHTML = ""
     buildSchoolsTable().then(() => {
         fetchTutorApplications();
     });
         
-    applicantsContainer.style.display = 'block';
-    schoolsContainer.style.display = 'none';
-    applicationsTab.className = 'nav-item-selected';
-    schoolsTab.className = 'nav-item';
+    adminApplicants.style.display = 'none';
+    adminSchools.style.display = 'block';
+    schoolsTab.className = 'nav-item-selected';
+    applicationsTab.className = 'nav-item';
 
     // Event listeners for tabs
     applicationsTab.addEventListener('click', function() {
