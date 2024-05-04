@@ -145,6 +145,7 @@ function checkNextButtonConditions() {
                 enableNextButton = true;
                 nextButtonClass = 'application-next-valid';
             }
+            
             break;
         case 'availability-section':
             // Disable if no slots available
@@ -430,3 +431,7 @@ function sendApplicationToServer(userID) {
         console.error("Error sending data to server:", error);
     });
 }
+<<<<<<< Updated upstream:TutorApplication/tutor-application0-0-0.js
+=======
+
+>>>>>>> Stashed changes:TutorApplication/tutor-application.js
