@@ -110,7 +110,7 @@ const subjectBackgrounds = {
     "italian": "https://firebasestorage.googleapis.com/v0/b/tutortree-68061.appspot.com/o/SubjectBackgrounds%2Fitalian.jpg?alt=media&token=d8ac37f9-3132-4f7d-8bd0-b0a3f9158bfe",
     "latin-america": "https://firebasestorage.googleapis.com/v0/b/tutortree-68061.appspot.com/o/SubjectBackgrounds%2Flatin-america.jpg?alt=media&token=f510af5e-fe94-4a72-8dd2-ed00e47b66e9",
     "life-sciences": "https://firebasestorage.googleapis.com/v0/b/tutortree-68061.appspot.com/o/SubjectBackgrounds%2Flife-sciences.jpg?alt=media&token=a24ebf08-d1d4-4063-9e60-70fa4d7b9983",
-    "management" "https://firebasestorage.googleapis.com/v0/b/tutortree-68061.appspot.com/o/SubjectBackgrounds%2Fmanagement.jpg?alt=media&token=36e0efa2-dda0-42b2-a588-240b198c98b4",
+    "management": "https://firebasestorage.googleapis.com/v0/b/tutortree-68061.appspot.com/o/SubjectBackgrounds%2Fmanagement.jpg?alt=media&token=36e0efa2-dda0-42b2-a588-240b198c98b4",
     "materials": "https://firebasestorage.googleapis.com/v0/b/tutortree-68061.appspot.com/o/SubjectBackgrounds%2Fmaterials.jpg?alt=media&token=fa38247b-1d13-4c42-99d6-a8739a439457",
     "microbiology": "https://firebasestorage.googleapis.com/v0/b/tutortree-68061.appspot.com/o/SubjectBackgrounds%2Fmicrobiology.jpg?alt=media&token=a917f45a-951f-4d65-93b5-f4852354f771",
     "nano": "https://firebasestorage.googleapis.com/v0/b/tutortree-68061.appspot.com/o/SubjectBackgrounds%2Fnano.jpg?alt=media&token=3bf12b40-2bc7-4ab7-b2e9-373c0ca9dec9",
