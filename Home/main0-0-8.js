@@ -129,7 +129,7 @@ const subjectBackgrounds = {
     "finance" :   "https://firebasestorage.googleapis.com/v0/b/tutortree-68061.appspot.com/o/SubjectBackgrounds%2Ffinance.jpg?alt=media&token=d76c0336-97e9-4ba7-8c9e-46934354feb1",
     "food"  :  "https://firebasestorage.googleapis.com/v0/b/tutortree-68061.appspot.com/o/SubjectBackgrounds%2Ffood.jpg?alt=media&token=88bc49b0-4ad8-4223-9d62-9a2d987c53d8",
     "french"  :  "https://firebasestorage.googleapis.com/v0/b/tutortree-68061.appspot.com/o/SubjectBackgrounds%2Ffrench.jpg?alt=media&token=9983e13a-94c8-42a8-af17-e79017e1d235",
-    'gender-studies"  :  "https://firebasestorage.googleapis.com/v0/b/tutortree-68061.appspot.com/o/SubjectBackgrounds%2Fgender-studies.jpg?alt=media&token=23442f25-5c94-446d-8281-b13ecbcab0ec",
+    "gender-studies"  :  "https://firebasestorage.googleapis.com/v0/b/tutortree-68061.appspot.com/o/SubjectBackgrounds%2Fgender-studies.jpg?alt=media&token=23442f25-5c94-446d-8281-b13ecbcab0ec",
     "geography"  :  "https://firebasestorage.googleapis.com/v0/b/tutortree-68061.appspot.com/o/SubjectBackgrounds%2Fgeography.jpg?alt=media&token=6124ae17-7d53-4fff-a9bb-6d08a1c84e1a",
     "geology"  :  "https://firebasestorage.googleapis.com/v0/b/tutortree-68061.appspot.com/o/SubjectBackgrounds%2Fgeology.jpg?alt=media&token=ddadb68c-9e0b-4335-8b2e-59318f337d45",
     "german" :   "https://firebasestorage.googleapis.com/v0/b/tutortree-68061.appspot.com/o/SubjectBackgrounds%2Fgerman.jpg?alt=media&token=c9072374-3505-4bd1-a14a-c0e85d357fe7",
