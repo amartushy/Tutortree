@@ -53,10 +53,10 @@ function renderApplications(applications) {
         createDOMElement('div', 'row-div-20 row-text', formatDate(app.dateCreated), rowParent);
         
         //Transcript
-        let transcriptContainer = createDOMElement('div', 'row-div-20 row-text', '', rowParent);
+        let transcriptContainer = createDOMElement('div', 'row-div-20', '', rowParent);
         var transcriptButton = createDOMElement('div', 'transcript-button', '', transcriptContainer);
-        createDOMElement('div', 'transcript-icon', '', transcriptContainer);
-        createDOMElement('div', 'row-text', 'Transcript', transcriptContainer);
+        createDOMElement('div', 'transcript-icon', '', transcriptButton);
+        createDOMElement('div', 'row-text', 'Transcript', transcriptButton);
         transcriptButton.addEventListener('click', () => {
             window.open(app.transcriptURL);
         });
