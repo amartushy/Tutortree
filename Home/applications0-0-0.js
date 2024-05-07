@@ -114,8 +114,20 @@ function formatDate(timestamp) {
 }
 
 function getInitials(fullName) {
+    // Check if fullName is undefined or empty
+    if (!fullName) {
+        return ""; // Return an empty string or any default initials you prefer
+    }
+    
     const names = fullName.split(' ');
-    let initials = names.map(name => name[0].toUpperCase()).join('');
+    let initials = names.map(name => {
+        // Check if name is not empty to avoid errors
+        if (name) {
+            return name[0].toUpperCase();
+        }
+        return ''; // Return empty string if name part is undefined or empty
+    }).join('');
+    
     return initials.slice(0, 2);
 }
 
@@ -136,3 +148,4 @@ function parseDate(date) {
         return new Date(0);
     }
 }
+
